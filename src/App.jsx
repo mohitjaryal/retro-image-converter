@@ -140,7 +140,7 @@ export default function App() {
 
       <div className="relative z-10 w-full max-w-3xl bg-black/40 border border-purple-700/40 rounded-3xl p-8 backdrop-blur-md shadow-[0_0_40px_rgba(168,85,247,0.2)]">
         <h1 className="text-3xl text-center mb-6 font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 font-['Press_Start_2P']">
-          REALISTIC POLAROID MAKER 📸
+          Retro Lab
         </h1>
 
         {/* Upload */}
