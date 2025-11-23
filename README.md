@@ -30,18 +30,14 @@ Turn your ordinary photos into stylish, retro-inspired Polaroids with custom fil
 1. Clone the repository:
 
 ```bash
-git clone https://github.com/mohitjaryal/retro-lab.git
-cd retro-lab
+git clone https://github.com/mohitjaryal/retro-image-converter.git
+cd retro-image-converter
 Install dependencies:
 
 
 
-npm install
-Start the development server:
-
-bash
-Copy code
-npm start
+- npm install
+- npm start
 
 ---
 
@@ -49,8 +45,7 @@ npm start
 
 1. Clone the repository:
 
-```bash
-git clone https://github.com/mohitjaryal/retro-lab.git
+git clone https://github.com/mohitjaryal/retro-image-converter.git
 cd retro-lab
 ```
 
