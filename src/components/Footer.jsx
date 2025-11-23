@@ -7,7 +7,7 @@ export default function Footer() {
   return (
     <footer className="mt-12 py-6 text-center border-t border-white/10 bg-gradient-to-b from-transparent to-[#0a0a0f]/80 relative z-10">
       <p className="mb-3 text-sm text-gray-300">
-        Built with ❤️ by{" "}
+        Built by{" "}
         <span className="text-purple-400 font-semibold drop-shadow-[0_0_6px_rgba(168,85,247,0.6)]">
           Mohit Jaryal
         </span>
