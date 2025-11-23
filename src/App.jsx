@@ -13,7 +13,6 @@ export default function App() {
   const [offsetY, setOffsetY] = useState(0);
   const canvasRef = useRef(null);
 
-  // preload Google fonts
   useEffect(() => {
     const fonts = [
       "Press Start 2P",
@@ -35,7 +34,6 @@ export default function App() {
     });
   }, []);
 
-  // Redraw on any change
   useEffect(() => {
     if (imageSrc) drawPolaroid();
   }, [imageSrc, filter, caption, tilt, font, zoom, offsetX, offsetY]);
@@ -67,22 +65,18 @@ export default function App() {
       canvas.height = height;
       ctx.clearRect(0, 0, width, height);
 
-      // frame
       ctx.fillStyle = "#fff";
       ctx.beginPath();
       ctx.roundRect(0, 0, width, height, 20);
       ctx.fill();
 
-      // drop shadow
-      canvas.style.boxShadow = "0 18px 40px rgba(0,0,0,0.45)";
+      canvas.style.boxShadow = "0 12px 30px rgba(168,85,247,0.35)";
       ctx.save();
 
-      // tilt
       ctx.translate(width / 2, height / 2);
       ctx.rotate((tilt * Math.PI) / 180);
       ctx.translate(-width / 2, -height / 2);
 
-      // filters
       const filters = {
         none: "none",
         gameboy: "contrast(1.2) saturate(0.3) hue-rotate(90deg)",
@@ -98,7 +92,6 @@ export default function App() {
       };
       ctx.filter = filters[filter];
 
-      // draw adjusted image
       const scaledWidth = imgWidth * zoom;
       const scaledHeight = imgHeight * zoom;
       const x = padding + offsetX;
@@ -107,7 +100,6 @@ export default function App() {
       ctx.restore();
       ctx.filter = "none";
 
-      // caption + date
       ctx.textAlign = "center";
       ctx.fillStyle = "#000";
       ctx.font = `26px '${font}', sans-serif`;
@@ -125,7 +117,7 @@ export default function App() {
   };
 
   const handleDownload = () => {
-    if (!canvasRef.current) return;
+    if (!canvasRef.current || !imageSrc) return;
     const link = document.createElement("a");
     link.download = "retro-polaroid.png";
     link.href = canvasRef.current.toDataURL("image/png", 1.0);
@@ -140,158 +132,156 @@ export default function App() {
     setFilter("none");
     setFont("Press Start 2P");
     setCaption("");
+    setImageSrc(null);
   };
 
   return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-[#0b0b0e] text-white p-6 relative overflow-hidden">
+    <div className="min-h-screen flex flex-col items-center justify-between bg-[#0e0e14] text-white p-4 relative overflow-hidden">
       <Header />
-      {/* background */}
-      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
-      <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-black to-blue-950/30" />
 
-      <div className="relative z-10 w-full max-w-3xl bg-black/30 border border-purple-700/30 rounded-3xl p-8 backdrop-blur-xl shadow-[0_0_40px_rgba(168,85,247,0.25)]">
-        <h1 className="text-3xl text-center mb-6 font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 font-['Press_Start_2P'] tracking-wide">
-          RETRO LAB 📸
-        </h1>
+      {/* Background Neon Grid */}
+      <div className="absolute inset-0 bg-gradient-to-br from-[#1a1a28]/40 via-[#0e0e14]/20 to-[#1a1a28]/40 pointer-events-none" />
+      <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.02)_1px,transparent_1px)] bg-[size:20px_20px] pointer-events-none" />
 
-        {/* Upload */}
-        <label className="block cursor-pointer bg-gradient-to-r from-purple-600 to-pink-600 hover:opacity-90 px-6 py-3 rounded-full text-sm font-semibold mx-auto w-fit shadow-lg mb-6">
-          Upload Image
-          <input
-            type="file"
-            accept="image/*"
-            onChange={handleUpload}
-            className="hidden"
-          />
-        </label>
-
-        {/* Filters + Font */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-          <select
-            value={filter}
-            onChange={(e) => setFilter(e.target.value)}
-            className="bg-black/60 border border-gray-700 text-sm px-4 py-2 rounded-full text-white font-mono focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="none">No Filter</option>
-            <option value="gameboy">GameBoy</option>
-            <option value="vhs">VHS Glow</option>
-            <option value="polaroid">Polaroid Warm</option>
-            <option value="sepia">Sepia Vintage</option>
-            <option value="cool">Cool Retro</option>
-            <option value="vaporwave">Vaporwave Neon</option>
-            <option value="noir">Noir Classic</option>
-            <option value="sunset">Sunset Glow</option>
-            <option value="pastel">Pastel Dream</option>
-            <option value="warmfade">Warm Fade</option>
-          </select>
-
-          <select
-            value={font}
-            onChange={(e) => setFont(e.target.value)}
-            className="bg-black/60 border border-gray-700 text-sm px-4 py-2 rounded-full text-white font-mono focus:ring-2 focus:ring-purple-500"
-          >
-            <option value="Press Start 2P">Pixel Retro</option>
-            <option value="Roboto Mono">Mono Modern</option>
-            <option value="Dancing Script">Handwritten</option>
-            <option value="Pacifico">Cursive Fun</option>
-            <option value="Great Vibes">Elegant Script</option>
-            <option value="Montserrat Alternates">Modern Sans</option>
-            <option value="Lobster">Retro Bold</option>
-          </select>
-        </div>
-
-        {/* Caption */}
-        <input
-          type="text"
-          placeholder="Add caption..."
-          value={caption}
-          onChange={(e) => setCaption(e.target.value)}
-          className="bg-black/50 border border-gray-700 rounded-full px-4 py-2 text-center text-xs text-white w-3/4 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono mb-4 mx-auto block"
-        />
-
-        {/* Image adjustments */}
-        <div className="grid grid-cols-3 gap-4 mb-6 text-xs text-gray-300 font-mono justify-items-center">
-          <div>
-            <label>Zoom</label>
+      <main className="flex-1 flex flex-col items-center justify-center w-full max-w-3xl transition-all duration-700 ease-in-out">
+        {!imageSrc && (
+          <label className="cursor-pointer bg-purple-600 hover:bg-purple-700 px-8 py-4 rounded-full text-white font-bold text-lg mb-6 transition-all">
+            Upload Image
             <input
-              type="range"
-              min="0.5"
-              max="2"
-              step="0.05"
-              value={zoom}
-              onChange={(e) => setZoom(Number(e.target.value))}
-              className="w-28 accent-purple-500"
+              type="file"
+              accept="image/*"
+              onChange={handleUpload}
+              className="hidden"
             />
-          </div>
-          <div>
-            <label>Move X</label>
+          </label>
+        )}
+
+        {imageSrc && (
+          <div className="relative w-full bg-[#1b1b27]/80 border border-[#444]/50 rounded-2xl p-6 md:p-8 backdrop-blur-md shadow-[0_0_25px_rgba(168,85,247,0.25)] flex flex-col items-center transition-all duration-700">
+            {/* Filters + Font */}
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 w-full">
+              <select
+                value={filter}
+                onChange={(e) => setFilter(e.target.value)}
+                className="bg-[#111]/50 border border-[#555]/50 text-sm px-4 py-2 rounded-full text-white font-mono focus:ring-2 focus:ring-purple-400 transition"
+              >
+                <option value="none">No Filter</option>
+                <option value="gameboy">GameBoy</option>
+                <option value="vhs">VHS Glow</option>
+                <option value="polaroid">Polaroid Warm</option>
+                <option value="sepia">Sepia Vintage</option>
+                <option value="cool">Cool Retro</option>
+                <option value="vaporwave">Vaporwave Neon</option>
+                <option value="noir">Noir Classic</option>
+                <option value="sunset">Sunset Glow</option>
+                <option value="pastel">Pastel Dream</option>
+                <option value="warmfade">Warm Fade</option>
+              </select>
+
+              <select
+                value={font}
+                onChange={(e) => setFont(e.target.value)}
+                className="bg-[#111]/50 border border-[#555]/50 text-sm px-4 py-2 rounded-full text-white font-mono focus:ring-2 focus:ring-purple-400 transition"
+              >
+                <option value="Press Start 2P">Pixel Retro</option>
+                <option value="Roboto Mono">Mono Modern</option>
+                <option value="Dancing Script">Handwritten</option>
+                <option value="Pacifico">Cursive Fun</option>
+                <option value="Great Vibes">Elegant Script</option>
+                <option value="Montserrat Alternates">Modern Sans</option>
+                <option value="Lobster">Retro Bold</option>
+              </select>
+            </div>
+
+            {/* Caption */}
             <input
-              type="range"
-              min="-100"
-              max="100"
-              value={offsetX}
-              onChange={(e) => setOffsetX(Number(e.target.value))}
-              className="w-28 accent-purple-500"
+              type="text"
+              placeholder="Add caption..."
+              value={caption}
+              onChange={(e) => setCaption(e.target.value)}
+              className="bg-[#111]/50 border border-[#555]/50 rounded-full px-4 py-2 text-center text-xs text-white w-3/4 focus:outline-none focus:ring-2 focus:ring-purple-400 font-mono mb-4 mx-auto block transition"
             />
+
+            {/* Image adjustments */}
+            <div className="grid grid-cols-3 gap-4 mb-6 text-xs text-gray-400 font-mono justify-items-center w-full">
+              <div>
+                <label>Zoom</label>
+                <input
+                  type="range"
+                  min="0.5"
+                  max="2"
+                  step="0.05"
+                  value={zoom}
+                  onChange={(e) => setZoom(Number(e.target.value))}
+                  className="w-28 accent-purple-400"
+                />
+              </div>
+              <div>
+                <label>Move X</label>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  value={offsetX}
+                  onChange={(e) => setOffsetX(Number(e.target.value))}
+                  className="w-28 accent-purple-400"
+                />
+              </div>
+              <div>
+                <label>Move Y</label>
+                <input
+                  type="range"
+                  min="-100"
+                  max="100"
+                  value={offsetY}
+                  onChange={(e) => setOffsetY(Number(e.target.value))}
+                  className="w-28 accent-purple-400"
+                />
+              </div>
+            </div>
+
+            {/* Tilt */}
+            <div className="flex items-center justify-center gap-3 mb-6">
+              <label className="text-xs text-gray-400 font-mono">Tilt</label>
+              <input
+                type="range"
+                min="-15"
+                max="15"
+                value={tilt}
+                onChange={(e) => setTilt(Number(e.target.value))}
+                className="w-48 accent-purple-400"
+              />
+              <span className="text-xs text-gray-400">{tilt}°</span>
+            </div>
+
+            {/* Buttons */}
+            <div className="flex flex-col md:flex-row justify-center gap-4 mb-8 w-full">
+              <button
+                onClick={handleDownload}
+                className="px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-green-500 to-teal-400 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.8)] transition"
+              >
+                DOWNLOAD
+              </button>
+              <button
+                onClick={handleReset}
+                className="px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-gray-700 to-gray-900 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(107,114,128,0.8)] transition"
+              >
+                RESET
+              </button>
+            </div>
+
+            {/* Canvas */}
+            <div className="relative mt-6 flex justify-center items-center min-h-[350px] w-full">
+              <canvas
+                ref={canvasRef}
+                className="max-w-full rounded-2xl shadow-lg transition-all duration-300 hover:scale-[1.01]"
+              />
+            </div>
           </div>
-          <div>
-            <label>Move Y</label>
-            <input
-              type="range"
-              min="-100"
-              max="100"
-              value={offsetY}
-              onChange={(e) => setOffsetY(Number(e.target.value))}
-              className="w-28 accent-purple-500"
-            />
-          </div>
-        </div>
+        )}
+      </main>
 
-        {/* Tilt */}
-        <div className="flex items-center justify-center gap-3 mb-6">
-          <label className="text-xs text-gray-400 font-mono">Tilt</label>
-          <input
-            type="range"
-            min="-15"
-            max="15"
-            value={tilt}
-            onChange={(e) => setTilt(Number(e.target.value))}
-            className="w-48 accent-purple-500"
-          />
-          <span className="text-xs text-gray-400">{tilt}°</span>
-        </div>
-
-        {/* Buttons */}
-        <div className="flex flex-col md:flex-row justify-center gap-4 mb-8">
-          <button
-            onClick={handleDownload}
-            className="px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-green-500 to-teal-600 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.8)] transition"
-          >
-            DOWNLOAD
-          </button>
-          <button
-            onClick={handleReset}
-            className="px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-gray-600 to-gray-800 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(107,114,128,0.8)] transition"
-          >
-            RESET
-          </button>
-        </div>
-
-        {/* Canvas */}
-        <div className="relative mt-6 flex justify-center items-center min-h-[350px]">
-          {imageSrc ? (
-            <canvas
-              ref={canvasRef}
-              className="max-w-full rounded-2xl shadow-lg transition-all duration-300 hover:scale-[1.01]"
-            />
-          ) : (
-            <p className="text-gray-500 text-xs font-mono">
-              Upload an image to start!
-            </p>
-          )}
-        </div>
-      </div>
-       <Footer />
+      <Footer />
     </div>
   );
 }
