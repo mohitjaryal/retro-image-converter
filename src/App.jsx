@@ -183,7 +183,7 @@ export default function App() {
           onClick={handleDownload}
           className="mt-2 px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-green-500 to-teal-600 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.8)] transition w-3/4 mx-auto block"
         >
-          DOWNLOAD POLAROID
+          DOWNLOAD
         </button>
 
         {/* Canvas */}
