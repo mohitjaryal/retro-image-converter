@@ -1,4 +1,6 @@
 import { useState, useRef, useEffect } from "react";
+import Footer from "./components/Footer";
+import Header from "./components/Header";
 
 export default function App() {
   const [imageSrc, setImageSrc] = useState(null);
@@ -142,6 +144,7 @@ export default function App() {
 
   return (
     <div className="min-h-screen flex flex-col items-center justify-center bg-[#0b0b0e] text-white p-6 relative overflow-hidden">
+      <Header />
       {/* background */}
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:20px_20px]" />
       <div className="absolute inset-0 bg-gradient-to-br from-purple-950/40 via-black to-blue-950/30" />
@@ -288,6 +291,7 @@ export default function App() {
           )}
         </div>
       </div>
+       <Footer />
     </div>
   );
 }
