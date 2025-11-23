@@ -1,16 +1,79 @@
-# React + Vite
+# RETRO LAB 📸
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+Turn your ordinary photos into stylish, retro-inspired Polaroids with custom filters, tilt, zoom, and captions. Perfect for creating nostalgic memories with a modern twist.
 
-Currently, two official plugins are available:
+---
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+## 🚀 Features
 
-## React Compiler
+- **Retro Filters**: Apply GameBoy, VHS, Polaroid, Sepia, Vaporwave, Noir, Sunset, Pastel, and Warmfade effects.  
+- **Custom Captions**: Add personalized text to your Polaroid images.  
+- **Zoom & Tilt**: Adjust your image perfectly within the Polaroid frame.  
+- **Pixel-Perfect Fonts**: Choose from multiple Google Fonts to style your captions.  
+- **Instant Download**: Save your Polaroid creations as PNGs with a single click.  
+- **Responsive UI**: Works beautifully on all screen sizes—mobile, tablet, and desktop.  
+- **Modern Retro Design**: Neon gradients, shadows, and minimalistic retro vibe.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the ESLint configuration
+## 🛠️ Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- **React.js** – Frontend framework for building the interactive UI.  
+- **Tailwind CSS** – Utility-first CSS framework for responsive styling.  
+- **react-icons** – Modern and customizable icons (GitHub, X, LinkedIn, Email, Website).  
+- **Canvas API** – Draw and manipulate Polaroid images in real-time.
+
+---
+
+## ⚡ Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/mohitjaryal/retro-lab.git
+cd retro-lab
+Install dependencies:
+
+
+
+npm install
+Start the development server:
+
+bash
+Copy code
+npm start
+
+---
+
+## ⚡ Installation
+
+1. Clone the repository:
+
+```bash
+git clone https://github.com/mohitjaryal/retro-lab.git
+cd retro-lab
+```
+
+🖱️ Usage
+
+Click Upload Image to select a photo from your device.
+
+Adjust filters, zoom, tilt, and caption text.
+
+Click Download PNG to save your retro Polaroid.
+
+Explore different fonts for captions to get the perfect nostalgic vibe.
+
+
+# 📧 Contact
+
+## Email: reach.mohitjaryal@gmail.com
+
+## Website: https://mohitjaryal.online
+
+
+# 📜 License
+
+This project is open-source and free to use under the MIT License
+
+## Make every moment look nostalgic and stylish!
