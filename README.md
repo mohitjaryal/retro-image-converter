@@ -43,10 +43,10 @@ Install dependencies:
 
 ## ⚡ Installation
 
-1. Clone the repository:
+ Clone the repository:
 
 git clone https://github.com/mohitjaryal/retro-image-converter.git
-cd retro-lab
+cd retro-image-converter
 ```
 
 🖱️ Usage
