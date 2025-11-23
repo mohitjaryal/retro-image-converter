@@ -6,9 +6,11 @@ export default function App() {
   const [caption, setCaption] = useState("");
   const [tilt, setTilt] = useState(0);
   const [font, setFont] = useState("Press Start 2P");
+  const [zoom, setZoom] = useState(1);
+  const [offsetX, setOffsetX] = useState(0);
+  const [offsetY, setOffsetY] = useState(0);
   const canvasRef = useRef(null);
 
-  // preload fonts
   useEffect(() => {
     const fonts = [
       "Press Start 2P",
@@ -27,10 +29,19 @@ export default function App() {
     });
   }, []);
 
-  // draw whenever dependencies change
+  // Redraw whenever something changes
   useEffect(() => {
     if (imageSrc) drawPolaroid();
-  }, [filter, caption, tilt, font, imageSrc]);
+  }, [
+    imageSrc,
+    filter,
+    caption,
+    tilt,
+    font,
+    zoom,
+    offsetX,
+    offsetY,
+  ]);
 
   const handleUpload = (e) => {
     const file = e.target.files[0];
@@ -46,31 +57,35 @@ export default function App() {
     const ctx = canvas.getContext("2d");
     const img = new Image();
     img.src = imageSrc;
+
     img.onload = () => {
       const imgWidth = 400;
       const imgHeight = (img.height / img.width) * imgWidth;
-      const pad = 35;
-      const bottomPad = 110;
-      const width = imgWidth + pad * 2;
-      const height = imgHeight + pad + bottomPad;
+      const padding = 35;
+      const bottomPadding = 110;
+      const width = imgWidth + padding * 2;
+      const height = imgHeight + padding + bottomPadding;
+
       canvas.width = width;
       canvas.height = height;
+      ctx.clearRect(0, 0, width, height);
 
-      // background + frame
+      // White Polaroid frame with soft corners
       ctx.fillStyle = "#fff";
-      ctx.roundRect(0, 0, width, height, 20);
+      ctx.beginPath();
+      ctx.roundRect(0, 0, width, height, 18);
       ctx.fill();
 
-      // realistic soft shadow
-      canvas.style.boxShadow = "0 15px 35px rgba(0,0,0,0.45)";
+      // Canvas shadow
+      canvas.style.boxShadow = "0 12px 30px rgba(0,0,0,0.45)";
       ctx.save();
 
-      // tilt
+      // Tilt
       ctx.translate(width / 2, height / 2);
       ctx.rotate((tilt * Math.PI) / 180);
       ctx.translate(-width / 2, -height / 2);
 
-      // filter
+      // Filters
       const filters = {
         gameboy: "contrast(1.2) saturate(0.3) hue-rotate(90deg)",
         vhs: "contrast(1.1) saturate(1.3) hue-rotate(-20deg)",
@@ -80,23 +95,31 @@ export default function App() {
         none: "none",
       };
       ctx.filter = filters[filter];
-      ctx.drawImage(img, pad, pad, imgWidth, imgHeight);
+
+      // Draw adjusted image
+      const scaledWidth = imgWidth * zoom;
+      const scaledHeight = imgHeight * zoom;
+      const x = padding + offsetX;
+      const y = padding + offsetY;
+
+      ctx.drawImage(img, x, y, scaledWidth, scaledHeight);
       ctx.restore();
       ctx.filter = "none";
 
-      // caption + date
+      // Caption text
       ctx.textAlign = "center";
       ctx.fillStyle = "#000";
       ctx.font = `26px '${font}', monospace`;
       ctx.fillText(caption || "My Polaroid", width / 2, height - 70);
 
+      // Auto date
       const dateText = new Date().toLocaleDateString(undefined, {
         year: "numeric",
         month: "short",
         day: "numeric",
       });
       ctx.font = `20px '${font}', monospace`;
-      ctx.fillStyle = "#555";
+      ctx.fillStyle = "#666";
       ctx.fillText(dateText, width / 2, height - 35);
     };
   };
@@ -115,9 +138,9 @@ export default function App() {
       <div className="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(255,255,255,0.03)_1px,transparent_1px)] bg-[size:22px_22px]" />
       <div className="absolute inset-0 bg-gradient-to-br from-purple-900/30 via-black to-blue-900/20" />
 
-      <div className="relative z-10 w-full max-w-2xl bg-black/40 border border-purple-700/40 rounded-3xl p-10 backdrop-blur-md shadow-[0_0_40px_rgba(168,85,247,0.2)]">
+      <div className="relative z-10 w-full max-w-3xl bg-black/40 border border-purple-700/40 rounded-3xl p-8 backdrop-blur-md shadow-[0_0_40px_rgba(168,85,247,0.2)]">
         <h1 className="text-3xl text-center mb-6 font-bold text-transparent bg-clip-text bg-gradient-to-r from-pink-400 via-purple-400 to-blue-400 font-['Press_Start_2P']">
-          Retro Lab
+          REALISTIC POLAROID MAKER 📸
         </h1>
 
         {/* Upload */}
@@ -131,8 +154,8 @@ export default function App() {
           />
         </label>
 
-        {/* Filter + Font + Tilt */}
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+        {/* Filters and font */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
           <select
             value={filter}
             onChange={(e) => setFilter(e.target.value)}
@@ -158,6 +181,7 @@ export default function App() {
           </select>
         </div>
 
+        {/* Caption */}
         <input
           type="text"
           placeholder="Type caption..."
@@ -166,6 +190,45 @@ export default function App() {
           className="bg-black/50 border border-gray-700 rounded-full px-4 py-2 text-center text-xs text-white w-3/4 focus:outline-none focus:ring-2 focus:ring-purple-500 font-mono mb-4 mx-auto block"
         />
 
+        {/* Image adjustments */}
+        <div className="grid grid-cols-3 gap-4 mb-6 text-xs text-gray-300 font-mono justify-items-center">
+          <div>
+            <label>Zoom</label>
+            <input
+              type="range"
+              min="0.5"
+              max="2"
+              step="0.05"
+              value={zoom}
+              onChange={(e) => setZoom(Number(e.target.value))}
+              className="w-28 accent-purple-500"
+            />
+          </div>
+          <div>
+            <label>Move X</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={offsetX}
+              onChange={(e) => setOffsetX(Number(e.target.value))}
+              className="w-28 accent-purple-500"
+            />
+          </div>
+          <div>
+            <label>Move Y</label>
+            <input
+              type="range"
+              min="-100"
+              max="100"
+              value={offsetY}
+              onChange={(e) => setOffsetY(Number(e.target.value))}
+              className="w-28 accent-purple-500"
+            />
+          </div>
+        </div>
+
+        {/* Tilt */}
         <div className="flex items-center justify-center gap-3 mb-6">
           <label className="text-xs text-gray-400 font-mono">Tilt</label>
           <input
@@ -179,11 +242,12 @@ export default function App() {
           <span className="text-xs text-gray-400">{tilt}°</span>
         </div>
 
+        {/* Download */}
         <button
           onClick={handleDownload}
           className="mt-2 px-6 py-2 text-xs font-bold rounded-full bg-gradient-to-r from-green-500 to-teal-600 text-white tracking-widest shadow-lg hover:shadow-[0_0_20px_rgba(34,197,94,0.8)] transition w-3/4 mx-auto block"
         >
-          DOWNLOAD
+          DOWNLOAD 
         </button>
 
         {/* Canvas */}
