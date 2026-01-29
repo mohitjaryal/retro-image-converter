@@ -21,7 +21,7 @@ export default function Header() {
                       rounded-full shadow-[0_0_16px_rgba(168,85,247,0.6)]
                       animate-pulse"></div>
       
-      {/* Optional glow effect  */}
+      {/* glow effect  */}
       <div className="absolute -top-4 w-60 h-60 bg-gradient-to-r from-pink-500 via-purple-500 to-blue-500 
                       rounded-full opacity-10 blur-3xl pointer-events-none"></div>
     </header>
