@@ -36,7 +36,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* Optional tagline */}
+      {/* Optional taglin */}
       <p className="text-xs text-gray-500">
         Visit the website for more.
       </p>
