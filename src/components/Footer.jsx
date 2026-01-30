@@ -35,7 +35,6 @@ export default function Footer() {
           </a>
         </div>
       </div>
-
       <p className="text-xs text-gray-500">
         Visit the website for more.
       </p>
